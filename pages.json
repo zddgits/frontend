@@ -1,0 +1,28 @@
+{
+	"pages": [
+	{
+		"path": "pages/component/login/login",
+		"style": {
+			"app-plus": {
+				"titleNView": false
+			}
+		}
+	},
+	{
+		
+		"path": "pages/component/index/index",
+		"style": {
+			"app-plus": {
+			    "titleNView": false
+			}
+		}
+	}
+	],
+
+	"globalStyle": {
+	"navigationBarTextStyle": "black",
+	"navigationBarTitleText": "uni-app",
+	"navigationBarBackgroundColor": "#F8F8F8",
+	"backgroundColor": "#F8F8F8"
+	}
+}
