@@ -3,7 +3,7 @@ import axios from 'axios'
 
 // create an axios instance
 const service = axios.create({
-	baseURL: 'http://localhost:9004', // url = base url + request url
+	// baseURL: 'http://localhost:9004', // url = base url + request url
 	//withCredentials: true, 
 	// send cookies when cross-domain requests
 	// 注意：withCredentials和后端配置的cross跨域不可同时使用
@@ -14,7 +14,7 @@ const service = axios.create({
 // request拦截器,在请求之前做一些处理
 service.interceptors.request.use(config => {
 		//添加请求头
-		config.headers.Authorization=localStorage.getItem("token_type")+localStorage.getItem("token");
+		config.headers.Authorization='Bearer '+localStorage.getItem("token");
 		console.log('请求拦截成功')
 		return config;
 	},
@@ -23,14 +23,27 @@ service.interceptors.request.use(config => {
 		return Promise.reject(error);
 	}
 );
-
+const toLogin=require("../pages/api/login/login");
 //配置成功后的拦截器
 service.interceptors.response.use(res => {
 	if (res.data.status == 200) {
-		return res.data
-	} else {
-		return Promise.reject(res.data.msg);
-	}
+			return res.data
+		} else {
+			if(res.data.refresh==1){
+				var tmp={
+					username: localStorage.getItem("username"),
+					password: localStorage.getItem("password"),
+				}
+				toLogin.toLogin(tmp).then(res=>{
+					if(res.data){
+						localStorage.setItem('token_type',res.data.token_type);
+						localStorage.setItem('token',res.data.access_token);
+					}
+				}).catch((err)=>{console.log(err)})
+			}else{
+				return Promise.reject(res.data.msg);
+			}
+		}
 }, error => {
 	if (error.response.status) {
 		switch (error.response.status) {

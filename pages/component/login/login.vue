@@ -5,15 +5,15 @@
 		<image class="img-a" src="@/static/2.png"></image>
 		<image class="img-b" src="@/static/3.png"></image>
 		<!-- 标题 -->
-		<view class="t-b">{{ title }}</view>
+		<view class="t-b" style="text-align: center;">{{ title }}</view>
 		<form class="cl">
 			<view class="t-a">
 				<image src="@/static/user.png"></image>
-				<input type="text"  placeholder="请输入用户名/手机号/邮箱" placeholder-style="color:#c9cbcd" v-model="loginForm.useraccount" />
+				<input type="text"  placeholder="请输入用户名/手机号/邮箱" placeholder-style="color:#c9cbcd" v-model="loginForm.username" />
 			</view>
 			<view class="t-a">
 				<image src="@/static/yz.png"></image>
-				<input type="text" maxlength="15" placeholder="请输入密码" placeholder-style="color:#c9cbcd" v-model="loginForm.pwd" />
+				<input type="text" maxlength="15" placeholder="请输入密码" placeholder-style="color:#c9cbcd" v-model="loginForm.password" />
 			</view>
 			<button @tap="login()">登 录</button>
 		</form>
@@ -30,10 +30,10 @@ export default {
 	data() {
 		return {
 			loginForm:{
-				useraccount: "", //账号
-				pwd: "",//密码
+				username: "", //账号
+				password: "",//密码
 			},
-			title: '欢迎回来！', //标题
+			title: '绿藤', //标题
 			errMsg: "",
 		};
 	},
@@ -42,11 +42,11 @@ export default {
 		//当前登录按钮操作
 		login() {	
 			var that = this;
-			if (!that.loginForm.useraccount) {
+			if (!that.loginForm.username) {
 				uni.showToast({ title: '请输入账号', icon: 'none' });
 				return;
 			}
-			if (!that.loginForm.pwd) {
+			if (!that.loginForm.password) {
 				uni.showToast({ title: '请输入密码', icon: 'none' });
 				return;
 			}
@@ -64,6 +64,8 @@ export default {
 					localStorage.setItem('token_type',res.data.token_type);
 					localStorage.setItem('token',res.data.access_token);
 					if(!res.data.error){
+						localStorage.setItem('username',this.data.username);
+						localStorage.setItem('password',this.data.password);
 						uni.showToast({ title: '登录成功！', icon: 'success' });
 						uni.switchTab({
 							url:"/pages/component/index/index"
